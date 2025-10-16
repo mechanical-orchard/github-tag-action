@@ -36,11 +36,20 @@ jobs:
           echo "Contents of lib directory:"
           find lib -type f
 
-      - name: Package release
+      - name: Configure git
         run: |
-          tar -czf release.tar.gz lib/ node_modules/ action.yml package.json package-lock.json
-          echo "Verifying tar contents..."
-          tar -tzf release.tar.gz | grep "^lib/" | head -20
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit lib folder for release tag only
+        run: |
+          git add -f lib/
+          git commit -m "Release ${{ inputs.version }}: Include compiled lib/ folder"
+
+      - name: Create and push tag (tag only, not branch)
+        run: |
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
 
       - name: Create GitHub Release
         env:
@@ -48,6 +57,4 @@ jobs:
         run: |
           gh release create ${{ inputs.version }} \
             --title "Release ${{ inputs.version }}" \
-            --notes "Built and released from commit ${{ github.sha }}" \
-            --target ${{ github.ref_name }} \
-            release.tar.gz
+            --notes "Built and released with compiled code included in source archives"
