@@ -29,9 +29,18 @@ jobs:
       - name: Build TypeScript
         run: npm run build
 
+      - name: Verify lib directory exists
+        run: |
+          echo "Checking if lib directory exists..."
+          ls -la lib/
+          echo "Contents of lib directory:"
+          find lib -type f
+
       - name: Package release
         run: |
           tar -czf release.tar.gz lib/ node_modules/ action.yml package.json package-lock.json
+          echo "Verifying tar contents..."
+          tar -tzf release.tar.gz | grep "^lib/" | head -20
 
       - name: Create GitHub Release
         env:
