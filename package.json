@@ -5,7 +5,7 @@
   "description": "A GitHub Action to automatically bump and tag master, on merge, with the latest SemVer formatted version.",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc && ncc build lib/main.js -o dist",
+    "build": "tsc",
     "test": "jest --testTimeout 10000",
     "check": "prettier --check ."
   },
