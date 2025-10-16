@@ -29,22 +29,22 @@ jobs:
       - name: Build TypeScript
         run: npm run build
 
-      - name: Verify lib directory exists
+      - name: Verify dist directory exists
         run: |
-          echo "Checking if lib directory exists..."
-          ls -la lib/
-          echo "Contents of lib directory:"
-          find lib -type f
+          echo "Checking if dist directory exists..."
+          ls -la dist/
+          echo "Contents of dist directory:"
+          find dist -type f
 
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit lib folder for release tag only
+      - name: Commit dist folder for release tag only
         run: |
-          git add -f lib/
-          git commit -m "Release ${{ inputs.version }}: Include compiled lib/ folder"
+          git add -f dist/
+          git commit -m "Release ${{ inputs.version }}: Include bundled dist/ folder with all dependencies"
 
       - name: Create and push tag (tag only, not branch)
         run: |
